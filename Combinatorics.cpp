@@ -81,3 +81,39 @@ struct comb{
     return ans;
   }
 };
+
+
+struct Mint{
+  int power(int a,int p){
+    int ans=1;
+    while(p){
+      if(p&1)
+        ans=(ans*a)%MOD;
+      a=(a*a)%MOD;
+      p>>=1;
+    }
+    return ans;
+  }
+
+  int inverse(int a){
+    return power(a,MOD-2);
+  }
+
+  int modsub(int a,int b){
+    a-=b;
+    a%=MOD; a+=MOD; a%=MOD;
+    return a;
+  }
+
+  int modadd(int a,int b){
+    a+=b;
+    a+=MOD; a%=MOD;
+    return a;
+  }
+
+  int modmult(int a,int b){
+    a*=b;
+    a%=MOD;
+    return a;
+  }
+};

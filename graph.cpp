@@ -119,9 +119,66 @@ void prim() {
   }
   cout << total_weight << endl;
 }
+
 //toposort
 
-//binary lifting
+//lca using binary lifting 
+//log(n) per query
+struct Blift{
+  int n,l;
+  vector<vector<int>> adj;
+
+  vector<vector<int>> up;
+  vector<int> tin,tout;
+
+  int timer=0;
+  void dfs(int node,int par){
+    up[node][0]=par;
+    for(int i=1;i<=l;i++){
+      up[node][i]=up[up[node][i-1]][i-1];
+    }
+
+    tin[node]=++timer;
+    for(auto nei:adj[node]){
+      if(nei==par)
+        continue;
+      dfs(nei,node);
+    }
+    tout[node]=++timer;
+  }
+
+  bool is_ancestor(int u,int v){
+    return (tin[u]<=tin[v] && tout[u]>=tin[v]);
+  }
+
+  int lca(int u,int v){
+    if(is_ancestor(u,v))
+      return u;
+    if(is_ancestor(v,u))
+      return v;
+
+    for(int i=l;i>=0;i--){
+      if(!is_ancestor(up[u][i],v))
+        u=up[u][i];
+    }
+    //we are just below the lca
+    return up[u][0];
+  }
+
+  void precomp(int root){
+    tin.resize(n,0);
+    tout.resize(n,0);
+    timer=0;
+    int l=ceil(log2(n));
+    up.assign(n,vector<int>(l+1));
+    dfs(root,root);
+  }
+};
+
+
+//lca using euler tour
+//O(1) per query
+
 
 
 //euler tour
